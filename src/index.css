@@ -5,3 +5,23 @@
 * {
   font-family: 'Raleway', sans-serif;
 }
+
+.gradient {
+	width: 100vw;
+	height: 100vh;
+	background: linear-gradient(334deg, #2196F3, #052b4b);
+	background-size: 180% 180%;
+	animation: gradient-animation 10s ease infinite;
+}
+
+@keyframes gradient-animation {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
