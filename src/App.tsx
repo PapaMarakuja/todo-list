@@ -56,9 +56,15 @@ function App() {
     setFilter(newFilter);
   }
 
+  function handleEnterKeyPress(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key !== 'Enter') return;
+
+    addItem(newItem);
+  }
+
   return (
-    <div className='bg-slate-300 text-zinc-800 h-screen flex justify-center'>
-      <div className='container flex items-center flex-col px-4 gap-4'>
+    <div className='bg-slate-300 text-zinc-800 min-h-screen flex justify-center'>
+      <div className='container flex items-center flex-col p-4 gap-4'>
         <h1 className='text-3xl text-center font-bold my-4'>Rafael's Todo List</h1>
 
         <Card>
@@ -70,6 +76,7 @@ function App() {
                 placeholder='Add new'
                 value={newItem}
                 onChange={handleNewItemChange}
+                onKeyDown={handleEnterKeyPress}
               />
               <button
                 className='px-2 bg-white rounded-e-md'
