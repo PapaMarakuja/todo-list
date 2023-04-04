@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import './App.css';
 import { CheckIcon, PlusIcon, XMarkIcon } from './assets/icons';
+import Card from './components/Card';
+import FilterCard from './components/FilterCard';
+import NotFound from './components/NotFound';
 
 function App() {
   const [newItem, setNewItem] = useState<string>();
+  const [filter, setFilter] = useState<'all' | 'done' | 'pending'>('all');
   const [list, setList] = useState<TodoList[]>([
     {
       title: 'Anything',
@@ -38,58 +42,94 @@ function App() {
     setNewItem(event.target.value);
   }
 
+  const filteredList = list.filter((todo) => {
+    if (filter === 'all') {
+      return true;
+    } else if (filter === 'done') {
+      return todo.done;
+    } else {
+      return !todo.done;
+    }
+  });
+
+  function changeFilter(newFilter: 'all' | 'done' | 'pending') {
+    setFilter(newFilter);
+  }
+
   return (
-    <div className='gradient text-zinc-800 h-screen flex justify-center'>
+    <div className='bg-slate-300 text-zinc-800 h-screen flex justify-center'>
       <div className='container flex items-center flex-col px-4 gap-4'>
         <h1 className='text-3xl text-center font-bold my-4'>Rafael's Todo List</h1>
 
-        <div className='w-full max-w-4xl bg-gray-100 bg-opacity-70 p-4 rounded-xl backdrop-blur-lg backdrop-saturate-150'>
+        <Card>
           <div className='grid place-items-center'>
-            <input
-              className='w-full rounded-2xl px-4 py-2'
-              type='text'
-              placeholder='Add new'
-              value={newItem}
-              onChange={handleNewItemChange}
-            />
-            <button onClick={() => addItem(newItem)} className='absolute top-6 right-8'>
-              <PlusIcon />
-            </button>
-            <div className='flex gap-4 pt-2'>
-              <label>
-                <input type='checkbox' /> Done
-              </label>
-              <label>
-                <input type='checkbox' /> Pending
-              </label>
+            <div className='flex w-full'>
+              <input
+                className='w-full rounded-s-md pl-4 py-2 outline-none'
+                type='text'
+                placeholder='Add new'
+                value={newItem}
+                onChange={handleNewItemChange}
+              />
+              <button
+                className='px-2 bg-white rounded-e-md'
+                onClick={() => addItem(newItem)}
+              >
+                <PlusIcon />
+              </button>
+            </div>
+            <div className='flex items-start w-full gap-1 pt-2'>
+              <FilterCard
+                text='All'
+                onClick={() => changeFilter('all')}
+                filter={filter}
+              />
+              <FilterCard
+                text='Pending'
+                onClick={() => changeFilter('pending')}
+                filter={filter}
+              />
+              <FilterCard
+                text='Done'
+                onClick={() => changeFilter('done')}
+                filter={filter}
+              />
             </div>
           </div>
-        </div>
+        </Card>
 
-        <div className='w-full max-w-4xl bg-gray-100 bg-opacity-70 p-4 rounded-xl backdrop-blur-lg backdrop-saturate-150'>
+        <Card>
           <ul className='flex flex-col gap-2'>
-            {list.map((thing: TodoList, index: number) => (
+            {filteredList.length <= 0 && <NotFound />}
+            {filteredList.map((thing: TodoList, index: number) => (
               <li
                 key={index}
-                className={`bg-slate-400 bg-opacity-75 rounded-md px-4 py-2 flex justify-between break-words ${
-                  thing.done ? 'bg-slate-800 text-slate-400 line-through' : ''
-                }`}
+                className={`bg-slate-300 bg-opacity-75 rounded-md px-4 py-2 min-h-[60px] flex justify-between items-center break-all transition-all 
+                ${thing.done ? '!bg-slate-500 text-slate-200 line-through' : ''}`}
               >
                 <h1>{thing.title}</h1>
                 <div className='flex gap-2 justify-start'>
                   {!thing.done && (
-                    <button onClick={() => markAsChecked(index)}>
+                    <button
+                      className='border border-green-500 text-green-600 rounded-md p-1 transition-colors hover:bg-green-300'
+                      onClick={() => markAsChecked(index)}
+                    >
                       <CheckIcon />
                     </button>
                   )}
-                  <button onClick={() => deleteItem(index)}>
+                  <button
+                    className={`border border-red-500 text-red-600 rounded-md p-1 transition-colors hover:bg-red-300 ${
+                      thing.done ? 'opacity-75' : ''
+                    }`}
+                    onClick={() => deleteItem(index)}
+                  >
                     <XMarkIcon />
                   </button>
                 </div>
               </li>
             ))}
           </ul>
-        </div>
+        </Card>
       </div>
     </div>
   );
