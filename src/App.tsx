@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import './App.css';
 import { CheckIcon, PlusIcon, XMarkIcon } from './assets/icons';
-import Card from './components/Card';
 import FilterCard from './components/FilterCard';
 import NotFound from './components/NotFound';
 
@@ -67,7 +66,7 @@ function App() {
       <div className='container flex items-center flex-col p-4 gap-4'>
         <h1 className='text-3xl text-center font-bold my-4'>Rafael's Todo List</h1>
 
-        <Card>
+        <div className='w-full max-w-4xl bg-gray-100 bg-opacity-70 p-4 rounded-xl backdrop-blur-lg backdrop-saturate-150'>
           <div className='grid place-items-center'>
             <div className='flex w-full'>
               <input
@@ -78,34 +77,18 @@ function App() {
                 onChange={handleNewItemChange}
                 onKeyDown={handleEnterKeyPress}
               />
-              <button
-                className='px-2 bg-white rounded-e-md'
-                onClick={() => addItem(newItem)}
-              >
+              <button className='px-2 bg-white rounded-e-md' onClick={() => addItem(newItem)}>
                 <PlusIcon />
               </button>
             </div>
             <div className='flex items-start w-full gap-1 pt-2'>
-              <FilterCard
-                text='All'
-                onClick={() => changeFilter('all')}
-                filter={filter}
-              />
-              <FilterCard
-                text='Pending'
-                onClick={() => changeFilter('pending')}
-                filter={filter}
-              />
-              <FilterCard
-                text='Done'
-                onClick={() => changeFilter('done')}
-                filter={filter}
-              />
+              <FilterCard text='All' onClick={() => changeFilter('all')} filter={filter} />
+              <FilterCard text='Pending' onClick={() => changeFilter('pending')} filter={filter} />
+              <FilterCard text='Done' onClick={() => changeFilter('done')} filter={filter} />
             </div>
           </div>
-        </Card>
-
-        <Card>
+        </div>
+        <div className='w-full max-w-4xl bg-gray-100 bg-opacity-70 p-4 rounded-xl backdrop-blur-lg backdrop-saturate-150'>
           <ul className='flex flex-col gap-2'>
             {filteredList.length <= 0 && <NotFound />}
             {filteredList.map((thing: TodoList, index: number) => (
@@ -136,7 +119,7 @@ function App() {
               </li>
             ))}
           </ul>
-        </Card>
+        </div>
       </div>
     </div>
   );
